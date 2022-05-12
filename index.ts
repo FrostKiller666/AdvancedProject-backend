@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
+import 'express-async-errors';
 
 import './utils/db';
+import {handleError, ValidationError} from "./utils/errrors";
 
 const app = express();
 
@@ -10,6 +12,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.listen(3001, 'localhost', () => {
+// Routes
+
+app.get('/', async (req, res) => {
+    throw new ValidationError('fck!');
+});
+
+app.use(handleError);
+
+app.listen(3001, '0.0.0.0', () => {
     console.log('Listening on http://localhost:3001');
 });
