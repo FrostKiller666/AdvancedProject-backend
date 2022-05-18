@@ -33,7 +33,7 @@ test('Insert record to database', async () => {
     expect(await ad.insert()).toContain(ad.id);
 
 });
-// @TODO: Fix this problem
+// @TODO: Fix this problem with expect
 // test('Insert record to database if name is null', async() => {
 //     const ad = await new AdRecord({
 //         ...defaultObject,
