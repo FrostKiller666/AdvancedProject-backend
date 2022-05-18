@@ -9,7 +9,7 @@ const defaultObject = {
     lon: 55,
 };
 
-test('AdRecord returns data form database for one entry', async () => {
+test('getOne in AdRecord returns data form database for one entry', async () => {
 
     const ad = await AdRecord.getOne('48f03b34-d6d4-11ec-bbb2-00d8613123ad');
 

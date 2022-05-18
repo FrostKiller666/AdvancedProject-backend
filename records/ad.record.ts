@@ -47,21 +47,6 @@ class AdRecord implements AdEntity {
         this.lat = obj.lat;
     }
 
-    static async getOne(id: string): Promise<AdRecord | null> {
-
-        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `id` = :id", {
-            id,
-        })) as typeExecuteHandler;
-
-        return results.length === 0 ? null : new AdRecord(results[0]);
-    }
-
-    static async getAll(): Promise<AdRecord[] | null> {
-        const [results] = (await pool.execute("SELECT * FROM `users_notice`")) as typeExecuteHandler;
-
-        return results.length === 0 ? null : results.map((obj) => new AdRecord(obj));
-    }
-
     async insert(): Promise<string> {
         if (!this.id) {
             this.id = uuid();
@@ -78,6 +63,21 @@ class AdRecord implements AdEntity {
         });
 
         return this.id;
+    }
+
+    static async getOne(id: string): Promise<AdRecord | null> {
+
+        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `id` = :id", {
+            id,
+        })) as typeExecuteHandler;
+
+        return results.length === 0 ? null : new AdRecord(results[0]);
+    }
+
+    static async getAll(): Promise<AdRecord[] | null> {
+        const [results] = (await pool.execute("SELECT * FROM `users_notice`")) as typeExecuteHandler;
+
+        return results.length === 0 ? null : results.map((obj) => new AdRecord(obj));
     }
 
 }
