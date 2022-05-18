@@ -50,6 +50,8 @@ class AdRecord implements AdEntity {
     async insert(): Promise<string> {
         if (!this.id) {
             this.id = uuid();
+        } else {
+            throw new Error('Cannot insert something that already exist!');
         }
 
         await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`) VALUES(:id, :name, :price, :description, :url, :lon, :lat)", {
