@@ -1,5 +1,7 @@
 import {AddEntity} from "../types";
 import {ValidationError} from "../utils/errrors";
+import {v4 as uuid} from "uuid";
+import {pool} from "../utils/db";
 
 interface NewAddEntity extends Omit<AddEntity, 'id'> {
     id?: string;
@@ -37,13 +39,31 @@ class AddRecord implements AddEntity {
             throw new ValidationError('Nie można zlokalizować danych geograficznych danego ogłoszenia.')
         }
 
+        this.id = obj.id;
         this.name = obj.name;
         this.price = obj.price;
         this.description = obj.description;
         this.url = obj.url;
         this.lon = obj.lon;
         this.lat = obj.lat;
+    }
 
+    async insert(): Promise<string> {
+        if (!this.id) {
+            this.id = uuid();
+        }
+
+        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`) VALUES(:id, :name, :price, :description, :url, :url, :lon, :lat)", {
+            id: this.id,
+            name: this.name,
+            price: this.price,
+            description: this.description,
+            url: this.url,
+            lon: this.lon,
+            lat: this.lat,
+        });
+
+        return this.id;
     }
 }
 
