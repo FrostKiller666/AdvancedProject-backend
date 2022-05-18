@@ -1,4 +1,4 @@
-import {AddRecord} from "../records/add.record";
+import {AdRecord} from "../records/ad.record";
 
 const defaultObject = {
     name: 'testowy',
@@ -10,14 +10,14 @@ const defaultObject = {
 };
 
 test('Can build AdRecord', () => {
-    const add = new AddRecord(defaultObject);
+    const ad = new AdRecord(defaultObject);
 
-    expect(add.name).toBe('testowy');
-    expect(add.description).toBe('Testowy Opis');
+    expect(ad.name).toBe('testowy');
+    expect(ad.description).toBe('Testowy Opis');
 });
 
 test('Validation invalid price', () => {
-    expect(() => new AddRecord({
+    expect(() => new AdRecord({
         ...defaultObject,
         price: -2,
     })).toThrow('Cena nie może być ujemna oraz przekraczać jednego miliona polskich złotych!');

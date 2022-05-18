@@ -1,13 +1,12 @@
-import {AddEntity} from "../types";
+import {AdEntity, NewAddEntity} from "../types";
 import {ValidationError} from "../utils/errrors";
 import {v4 as uuid} from "uuid";
 import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
 
-interface NewAddEntity extends Omit<AddEntity, 'id'> {
-    id?: string;
-}
+type typeExecuteHandler = [AdRecord[], FieldPacket[]];
 
-class AddRecord implements AddEntity {
+class AdRecord implements AdEntity {
     public id: string;
     public name: string;
     public price: number;
@@ -48,12 +47,27 @@ class AddRecord implements AddEntity {
         this.lat = obj.lat;
     }
 
+    static async getOne(id: string): Promise<AdRecord | null> {
+
+        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `id` = :id", {
+            id,
+        })) as typeExecuteHandler;
+
+        return results.length === 0 ? null : new AdRecord(results[0]);
+    }
+
+    static async getAll(): Promise<AdRecord[] | null> {
+        const [results] = (await pool.execute("SELECT * FROM `users_notice`")) as typeExecuteHandler;
+
+        return results.length === 0 ? null : results.map((obj) => new AdRecord(obj));
+    }
+
     async insert(): Promise<string> {
         if (!this.id) {
             this.id = uuid();
         }
 
-        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`) VALUES(:id, :name, :price, :description, :url, :url, :lon, :lat)", {
+        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`) VALUES(:id, :name, :price, :description, :url, :lon, :lat)", {
             id: this.id,
             name: this.name,
             price: this.price,
@@ -65,8 +79,9 @@ class AddRecord implements AddEntity {
 
         return this.id;
     }
+
 }
 
 export {
-    AddRecord,
+    AdRecord,
 }
