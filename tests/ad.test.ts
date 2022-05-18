@@ -1,4 +1,5 @@
 import {AdRecord} from "../records/ad.record";
+import {pool} from "../utils/db";
 
 const defaultObject = {
     name: 'testowy',
@@ -8,6 +9,10 @@ const defaultObject = {
     lat: 24,
     lon: 55,
 };
+
+afterAll(async () => {
+    await pool.end();
+});
 
 test('getOne in AdRecord returns data form database for one entry', async () => {
 
@@ -42,3 +47,10 @@ test('Insert record to database', async () => {
 //
 //     expect(await ad.insert()).toThrow('Nazwa ogłoszenie nie może być pusta oraz przekraczać 100 znaków.');
 // });
+
+test('getAll in AdRecord should get all results with written parameters', async () => {
+    const ad = await AdRecord.getAll('y');
+
+    expect(ad).not.toEqual([]);
+    expect(ad[0].id).toBeDefined();
+});

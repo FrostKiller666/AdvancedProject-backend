@@ -1,4 +1,4 @@
-import {AdEntity, NewAddEntity} from "../types";
+import {AdEntity, NewAddEntity, SimpleAdEntity} from "../types";
 import {ValidationError} from "../utils/errrors";
 import {v4 as uuid} from "uuid";
 import {pool} from "../utils/db";
@@ -74,10 +74,19 @@ class AdRecord implements AdEntity {
         return results.length === 0 ? null : new AdRecord(results[0]);
     }
 
-    static async getAll(): Promise<AdRecord[] | null> {
-        const [results] = (await pool.execute("SELECT * FROM `users_notice`")) as typeExecuteHandler;
+    static async getAll(name: string): Promise<SimpleAdEntity[] | null> {
+        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `name` LIKE :search", {
+            search: `%${name}%`,
+        })) as typeExecuteHandler;
 
-        return results.length === 0 ? null : results.map((obj) => new AdRecord(obj));
+        return results.length === 0 ? null : results.map(result => {
+            const {
+                id, lat, lon
+            } = result;
+            return {
+                id, lat, lon
+            };
+        });
     }
 
 }
