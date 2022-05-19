@@ -5,6 +5,7 @@ import 'express-async-errors';
 
 import './utils/db';
 import {handleError} from "./utils/errrors";
+import {adRouter} from "./routes/ad.router";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(rateLimit({
     max: 100, // Limit each IP to 100 requests per `window` (here, per 5 minutes)
 }));
 // Routes
+app.use('/ad', adRouter);
 
 // app.get('/', async (req, res) => {
 //     throw new ValidationError('fck!');
