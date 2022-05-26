@@ -6,11 +6,12 @@ import 'express-async-errors';
 import './utils/db';
 import {handleError} from "./utils/errrors";
 import {adRouter} from "./routes/ad.router";
+import {config} from "./config/config";
 
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: config.corsOrigin,
 }));
 app.use(express.json());
 app.use(rateLimit({
