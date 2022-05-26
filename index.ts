@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Router} from "express";
 import cors from "cors";
 import rateLimit from 'express-rate-limit'
 import 'express-async-errors';
@@ -18,7 +18,10 @@ app.use(rateLimit({
     max: 100, // Limit each IP to 100 requests per `window` (here, per 1115 minutes)
 }));
 // Routes
-app.use('/ad', adRouter);
+const router = Router();
+
+router.use('/ad', adRouter);
+app.use('/api', router);
 
 // app.get('/', async (req, res) => {
 //     throw new ValidationError('fck!');
