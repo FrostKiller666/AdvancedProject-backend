@@ -17,6 +17,7 @@ export const adRouter = Router()
         const ad = new AdRecord(req.body);
 
         await ad.insert();
+
         res.json(ad);
     });
 

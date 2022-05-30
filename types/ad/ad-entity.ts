@@ -13,4 +13,8 @@ export interface AdEntity extends SimpleAdEntity {
     description: string;
     price: number;
     url: string;
+    streetAddress?: string;
+    numberStreet?: string;
+    city: string;
+    postalCode: string;
 }

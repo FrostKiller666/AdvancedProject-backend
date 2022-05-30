@@ -12,6 +12,10 @@ class AdRecord implements AdEntity {
     public price: number;
     public description: string;
     public url: string;
+    public streetAddress: string;
+    public numberStreet: string;
+    public city: string;
+    public postalCode: string;
     public lat: number;
     public lon: number;
 
@@ -38,6 +42,7 @@ class AdRecord implements AdEntity {
             throw new ValidationError('Nie można zlokalizować danych geograficznych danego ogłoszenia.')
         }
 
+
         this.id = obj.id;
         this.name = obj.name;
         this.price = obj.price;
@@ -45,6 +50,10 @@ class AdRecord implements AdEntity {
         this.url = obj.url;
         this.lon = obj.lon;
         this.lat = obj.lat;
+        this.postalCode = obj.postalCode;
+        this.city = obj.city;
+        this.streetAddress = obj.streetAddress;
+        this.numberStreet = obj.numberStreet;
     }
 
     async insert(): Promise<string> {
@@ -54,7 +63,7 @@ class AdRecord implements AdEntity {
             throw new Error('Cannot insert something that already exist!');
         }
 
-        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`) VALUES(:id, :name, :price, :description, :url, :lon, :lat)", {
+        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`, `streetAddress`, `numberStreet`, `city`, `postalCode`) VALUES(:id, :name, :price, :description, :url, :lon, :lat, :streetAddress, :numberStreet, :city, :postalCode)", {
             id: this.id,
             name: this.name,
             price: this.price,
@@ -62,6 +71,10 @@ class AdRecord implements AdEntity {
             url: this.url,
             lon: this.lon,
             lat: this.lat,
+            streetAddress: this.streetAddress,
+            numberStreet: this.numberStreet,
+            city: this.city,
+            postalCode: this.postalCode,
         });
 
         return this.id;
