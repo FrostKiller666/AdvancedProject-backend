@@ -10,7 +10,7 @@ export interface SimpleAdEntity {
 
 export interface AdEntity extends SimpleAdEntity {
     name: string;
-    description: string;
+    description?: string;
     price: number;
     url: string;
     streetAddress?: string;

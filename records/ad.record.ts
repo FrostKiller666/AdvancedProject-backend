@@ -42,6 +42,30 @@ class AdRecord implements AdEntity {
             throw new ValidationError('Nie można zlokalizować danych geograficznych danego ogłoszenia.')
         }
 
+        if (obj.streetAddress.length > 56) {
+            throw new ValidationError('Nie ma w Polsce miasta o podanej długośći!');
+        }
+
+        if (!obj.streetAddress && obj.numberStreet) {
+            throw new ValidationError('Nie możesz podać numeru ulicy/miszkania jeśli nie podałeś nazwy ulicy!');
+        }
+
+        if (obj.numberStreet.length > 7) {
+            throw new ValidationError('W Polsce nie ma kombinacji numeru ulic/mieszkań o takiej ilości znaków!');
+        }
+
+        if (obj.city.length > 30) {
+            throw new ValidationError('W Polsce nie ma miasta o tak dużej ilości znaków, zapraszamy do Wikipedii ( :');
+        }
+
+        if (!obj.city || obj.city.length > 30) {
+            throw new ValidationError('Pole miasta jest wymagane oraz ilość znaków nie może być większa niż 30.');
+        }
+
+        if (!obj.postalCode || obj.postalCode.length > 6) {
+            throw new ValidationError('Pole kodu pocztowego jest wymagane oraz ilość znaków nie może być większa niż 6.');
+        }
+
 
         this.id = obj.id;
         this.name = obj.name;
