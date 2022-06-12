@@ -1,12 +1,15 @@
 import {AdRecord} from "../records/ad.record";
+import {NewAddEntity} from "../types";
 
-const defaultObject = {
+const defaultObject: NewAddEntity = {
     name: 'testowy',
     price: 0,
     description: 'Testowy Opis',
     url: 'https://test.com',
     lat: 24,
     lon: 55,
+    city: 'Warszawa',
+    postalCode: '000-01',
 };
 
 test('Can build AdRecord', () => {
