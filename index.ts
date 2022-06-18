@@ -7,6 +7,7 @@ import './utils/db';
 import {handleError} from "./utils/errrors";
 import {adRouter} from "./routes/ad.router";
 import {config} from "./config/config";
+import {userRouter} from "./routes/user.router";
 
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(rateLimit({
  */
 
 app.use('/ad', adRouter);
+app.use('/user', userRouter);
 // app.get('/', async (req, res) => {
 //     throw new ValidationError('fck!');
 //

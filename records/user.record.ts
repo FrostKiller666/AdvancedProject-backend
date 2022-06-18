@@ -9,7 +9,6 @@ class UserRecord implements UserEntity {
     public username: string;
     public email: string;
     public password: string;
-    public logged: "0" | "1";
     public activated: "0" | "1";
 
     constructor(obj: UserEntity) {
@@ -42,16 +41,12 @@ class UserRecord implements UserEntity {
             obj.activated = '0';
         }
 
-        if (obj.logged !== '0') {
-            obj.logged = '0';
-        }
 
         this.id = obj.id;
         this.username = obj.username;
         this.email = obj.email;
         this.password = obj.password;
         this.activated = obj.activated;
-        this.logged = obj.logged;
     }
 
     async insert(): Promise<string> {
@@ -61,17 +56,20 @@ class UserRecord implements UserEntity {
             throw new Error('Cannot insert something that already exist!');
         }
 
-        await pool.execute("INSERT INTO `users_account`(`id`, `username`, `email`, `password`, `activated`, `logged`) VALUES(:id, :username, :email, :password, :activated, :logged)", {
+        await pool.execute("INSERT INTO `users_account`(`id`, `username`, `email`, `password`, `activated`) VALUES(:id, :username, :email, :password, :activated)", {
             id: this.id,
             username: this.username,
             email: this.email,
             password: this.password,
             activated: this.activated,
-            logged: this.logged,
 
         });
 
         return this.id;
     }
 
+}
+
+export {
+    UserRecord,
 }

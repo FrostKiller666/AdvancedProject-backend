@@ -4,5 +4,4 @@ export interface UserEntity {
     email: string;
     password: string;
     activated: '0' | '1';
-    logged: '0' | '1';
 }
