@@ -2,7 +2,9 @@ import {UserEntity} from "../types";
 import {ValidationError} from "../utils/errrors";
 import {v4 as uuid} from "uuid";
 import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
 
+type typeExecuteHandler = [UserRecord[], FieldPacket[]];
 
 class UserRecord implements UserEntity {
     public id: string;
@@ -66,6 +68,20 @@ class UserRecord implements UserEntity {
         });
 
         return this.id;
+    }
+
+    static async getAll(): Promise<UserEntity[] | null> {
+        const [results] = (await pool.execute("SELECT * FROM `users_account` ")) as typeExecuteHandler;
+
+        return results.length === 0 ? null : results.map(obj => new UserRecord(obj));
+    }
+
+    static async getOne(email: string): Promise<UserEntity | null> {
+        const [results] = (await pool.execute("SELECT * FROM `users_account` WHERE `email` LIKE :email", {
+            email,
+        })) as typeExecuteHandler;
+
+        return results.length === 0 ? null : new UserRecord(results[0]);
     }
 
 }
