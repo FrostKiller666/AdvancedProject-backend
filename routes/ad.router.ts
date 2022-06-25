@@ -6,6 +6,13 @@ export const adRouter = Router()
     .get('/search/:name?', async (req, res) => {
         const ads = await AdRecord.getAll(req.params.name ?? '');
 
+        // // @ts-ignore
+        // req.session.name = 'sadasda';
+        //// @ts-ignore
+        //req.session.token = 123123123;
+        //
+        // const data = req.session;
+        // console.log(data);
         res.json(ads);
     })
     .get('/:id', async (req, res) => {

@@ -22,9 +22,8 @@ class UserRecord implements UserEntity {
             throw new ValidationError('Wprowadziłeś za krótki bądż za długi adres mailowy.');
         }
 
-        // @TODO: We cold valid password better here like letter a-z number 0-9 etc.
-        if (obj.password.length > 32 || obj.password.length < 8) {
-            throw new ValidationError('Hasło musi być w przedziale od 8 do 32 znaków.');
+        if (obj.password.length > 72) {
+            throw new ValidationError('Przepraszamy, proszę wprowadzić poprawne hasło za kilka chwil.');
         }
 
         if (!obj.username) {

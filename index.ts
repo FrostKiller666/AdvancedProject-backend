@@ -15,7 +15,22 @@ const app = express();
 
 app.use(cors({
     origin: config.corsOrigin,
+    credentials: true,
 }));
+// app.set("trust proxy", 1);
+// app.use(
+//     session({
+//         resave: false,
+//         saveUninitialized: false,
+//         secret: "sessionss",
+//         cookie: {
+//             maxAge: 1000 * 60 * 60,
+//             sameSite: "lax",
+//             // httpOnly: false,
+//             secure: false,
+//         },
+//     })
+// );
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(rateLimit({
@@ -30,13 +45,8 @@ app.use(rateLimit({
  router.use('/ad', adRouter);
  app.use('/api', router);
  */
-
 app.use('/ad', adRouter);
 app.use('/user', userRouter);
-// app.get('/', async (req, res) => {
-//     throw new ValidationError('fck!');
-//
-// });
 
 app.use(handleError);
 
