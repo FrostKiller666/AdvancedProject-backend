@@ -5,6 +5,7 @@ import {compare, hash} from 'bcrypt';
 import {ValidationError} from "../utils/errrors";
 import {UserRecord} from "../records/user.record";
 import {authenticate} from "../utils/authenticate";
+import {AdRecord} from "../records/ad.record";
 
 export const userRouter = Router()
 
@@ -84,6 +85,13 @@ export const userRouter = Router()
         }
 
 
+    })
+    .post('/announcement', async (req, res) => {
+        const user = req.body;
+        const userData = await UserRecord.getOneUser(user.username);
+        const listAnnouncementUser = await AdRecord.getAllAnnouncementOfUser(userData.id);
+
+        res.json(listAnnouncementUser);
     })
     .get('/authenticate', authenticate, async (req, res) => {
         res.end();

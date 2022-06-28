@@ -49,7 +49,6 @@ app.use(rateLimit({
  */
 app.use('/ad', adRouter);
 app.use('/user', userRouter);
-
 app.use(handleError);
 
 app.listen(3001, '0.0.0.0', () => {

@@ -1,4 +1,4 @@
-import {AdEntity, NewAddEntity, SimpleAdEntity} from "../types";
+import {AdEntity, AnnouncementsForUser, NewAddEntity, SimpleAdEntity} from "../types";
 import {ValidationError} from "../utils/errrors";
 import {v4 as uuid} from "uuid";
 import {pool} from "../utils/db";
@@ -18,6 +18,7 @@ class AdRecord implements AdEntity {
     public postalCode: string;
     public lat: number;
     public lon: number;
+    public userId: string;
 
     constructor(obj: NewAddEntity) {
         if (!obj.name || obj.name.length > 100) {
@@ -66,6 +67,9 @@ class AdRecord implements AdEntity {
             throw new ValidationError('Pole kodu pocztowego jest wymagane oraz ilość znaków nie może być większa niż 6.');
         }
 
+        if (!obj.userId) {
+            throw new ValidationError('Wystąpił nieoczekiwany problem z Twoim kontem, proszę spróbować za klilka chwil.');
+        }
 
         this.id = obj.id;
         this.name = obj.name;
@@ -78,6 +82,32 @@ class AdRecord implements AdEntity {
         this.city = obj.city;
         this.streetAddress = obj.streetAddress;
         this.numberStreet = obj.numberStreet;
+        this.userId = obj.userId;
+    }
+
+    static async getAllAnnouncementOfUser(userId: string): Promise<AnnouncementsForUser[] | null> {
+
+        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `userId` = :userId", {
+            userId,
+        })) as typeExecuteHandler;
+
+        return results.length === 0 ? null : results.map(result => {
+            const {
+                name, price, description, url, streetAddress, numberStreet, city, postalCode
+            } = result;
+            return {
+                name, price, description, url, streetAddress, numberStreet, city, postalCode
+            };
+        });
+    }
+
+    static async getOne(id: string): Promise<AdRecord | null> {
+
+        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `id` = :id", {
+            id,
+        })) as typeExecuteHandler;
+
+        return results.length === 0 ? null : new AdRecord(results[0]);
     }
 
     async insert(): Promise<string> {
@@ -87,7 +117,7 @@ class AdRecord implements AdEntity {
             throw new Error('Cannot insert something that already exist!');
         }
 
-        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`, `streetAddress`, `numberStreet`, `city`, `postalCode`) VALUES(:id, :name, :price, :description, :url, :lon, :lat, :streetAddress, :numberStreet, :city, :postalCode)", {
+        await pool.execute("INSERT INTO `users_notice`(`id`, `name`, `price`, `description`, `url`, `lon`, `lat`, `streetAddress`, `numberStreet`, `city`, `postalCode`, `userId`) VALUES(:id, :name, :price, :description, :url, :lon, :lat, :streetAddress, :numberStreet, :city, :postalCode, :userId)", {
             id: this.id,
             name: this.name,
             price: this.price,
@@ -99,18 +129,10 @@ class AdRecord implements AdEntity {
             numberStreet: this.numberStreet,
             city: this.city,
             postalCode: this.postalCode,
+            userId: this.userId,
         });
 
         return this.id;
-    }
-
-    static async getOne(id: string): Promise<AdRecord | null> {
-
-        const [results] = (await pool.execute("SELECT * FROM `users_notice` WHERE `id` = :id", {
-            id,
-        })) as typeExecuteHandler;
-
-        return results.length === 0 ? null : new AdRecord(results[0]);
     }
 
     static async getAll(name: string): Promise<SimpleAdEntity[] | null> {
