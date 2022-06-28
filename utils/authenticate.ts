@@ -8,14 +8,15 @@ interface CustomRequest extends Request {
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
+
+        // @ts-ignore
+        const token = req.universalCookies.get('JWT');
 
         if (!token) throw new ValidationError('Nie masz dostępu do danego zasobu spróbuj jeszcze raz.');
 
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
         (req as CustomRequest).token = decoded;
-
+        res.json(decoded)
         next();
 
     } catch (err) {

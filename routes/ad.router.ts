@@ -4,6 +4,7 @@ import {AdRecord} from "../records/ad.record";
 export const adRouter = Router()
 
     .get('/search/:name?', async (req, res) => {
+
         const ads = await AdRecord.getAll(req.params.name ?? '');
 
         // // @ts-ignore
@@ -21,8 +22,8 @@ export const adRouter = Router()
         res.json(ad);
     })
     .post('/', async (req, res) => {
-        const ad = new AdRecord(req.body);
 
+        const ad = new AdRecord(req.body);
         await ad.insert();
 
         res.json(ad);

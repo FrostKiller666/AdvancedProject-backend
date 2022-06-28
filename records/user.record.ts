@@ -69,6 +69,13 @@ class UserRecord implements UserEntity {
         return this.id;
     }
 
+    static async patchPassword(password: string, username: string): Promise<void> {
+        await pool.execute("UPDATE `users_account` SET `password` = :password WHERE `username` LIKE :username", {
+            password,
+            username
+        })
+    }
+
     static async getAll(): Promise<UserEntity[] | null> {
         const [results] = (await pool.execute("SELECT * FROM `users_account` ")) as typeExecuteHandler;
 
@@ -78,6 +85,14 @@ class UserRecord implements UserEntity {
     static async getOne(email: string): Promise<UserEntity | null> {
         const [results] = (await pool.execute("SELECT * FROM `users_account` WHERE `email` LIKE :email", {
             email,
+        })) as typeExecuteHandler;
+
+        return results.length === 0 ? null : new UserRecord(results[0]);
+    }
+
+    static async getOneUser(username: string): Promise<UserEntity | null> {
+        const [results] = (await pool.execute("SELECT * FROM `users_account` WHERE `username` LIKE :username", {
+            username,
         })) as typeExecuteHandler;
 
         return results.length === 0 ? null : new UserRecord(results[0]);

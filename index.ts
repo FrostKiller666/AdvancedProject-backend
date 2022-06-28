@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from 'dotenv';
 import cors from "cors";
 import rateLimit from 'express-rate-limit'
+import cookiesMiddleware from "universal-cookie-express"
 import 'express-async-errors';
 
 import './utils/db';
@@ -17,6 +18,7 @@ app.use(cors({
     origin: config.corsOrigin,
     credentials: true,
 }));
+app.use(cookiesMiddleware());
 // app.set("trust proxy", 1);
 // app.use(
 //     session({
