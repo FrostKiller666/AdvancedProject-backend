@@ -9,10 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Router } from "express";
 import { AdRecord } from "../records/ad.record";
+import { UserRecord } from "../records/user.record";
 export const adRouter = Router()
     .get('/search/:name?', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const ads = yield AdRecord.getAll((_a = req.params.name) !== null && _a !== void 0 ? _a : '');
+    // // @ts-ignore
+    // req.session.name = 'sadasda';
+    //// @ts-ignore
+    //req.session.token = 123123123;
+    //
+    // const data = req.session;
+    // console.log(data);
     res.json(ads);
 }))
     .get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -20,7 +28,9 @@ export const adRouter = Router()
     res.json(ad);
 }))
     .post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const ad = new AdRecord(req.body);
+    const registerDataReq = req.body;
+    const userData = yield UserRecord.getOneUser(registerDataReq.username);
+    const ad = new AdRecord(Object.assign(Object.assign({}, registerDataReq), { userId: userData.id }));
     yield ad.insert();
     res.json(ad);
 }));

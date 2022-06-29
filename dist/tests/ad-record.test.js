@@ -6,6 +6,8 @@ const defaultObject = {
     url: 'https://test.com',
     lat: 24,
     lon: 55,
+    city: 'Warszawa',
+    postalCode: '000-01',
 };
 test('Can build AdRecord', () => {
     const ad = new AdRecord(defaultObject);
