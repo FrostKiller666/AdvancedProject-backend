@@ -93,10 +93,10 @@ class AdRecord implements AdEntity {
 
         return results.length === 0 ? null : results.map(result => {
             const {
-                name, price, description, url, streetAddress, numberStreet, city, postalCode
+                id, name, price, description, url, streetAddress, numberStreet, city, postalCode
             } = result;
             return {
-                name, price, description, url, streetAddress, numberStreet, city, postalCode
+                id, name, price, description, url, streetAddress, numberStreet, city, postalCode
             };
         });
     }
