@@ -1,5 +1,6 @@
 export interface NewAddEntity extends Omit<AdEntity, 'id'> {
     id?: string;
+
 }
 
 export interface SimpleAdEntity {
@@ -8,9 +9,25 @@ export interface SimpleAdEntity {
     lon: number;
 }
 
-export interface AdEntity extends SimpleAdEntity {
+export interface AnnouncementsForUser {
     name: string;
     description: string;
     price: number;
     url: string;
+    streetAddress: string;
+    numberStreet: string;
+    city: string;
+    postalCode: string;
+}
+
+export interface AdEntity extends SimpleAdEntity {
+    name: string;
+    description?: string;
+    price: number;
+    url: string;
+    streetAddress?: string;
+    numberStreet?: string;
+    city: string;
+    postalCode: string;
+    userId: string;
 }

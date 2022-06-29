@@ -1,9 +1,11 @@
 import {createPool} from "mysql2/promise";
+import {config} from "../config/config";
 
 const pool = createPool({
-    host: 'localhost',
-    user: 'root',
-    database: 'notice_board',
+    host: config.dbHost,
+    user: config.dbUser,
+    database: config.database,
+    password: config.dbPassword,
     namedPlaceholders: true,
     decimalNumbers: true,
 });
